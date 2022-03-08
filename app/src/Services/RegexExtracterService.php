@@ -22,6 +22,9 @@ class RegexExtracterService
 
     public function __call($name, $arguments)
     {
+        if (!isset($this->regexList[$name])) {
+            return null;
+        }
         preg_match($this->regexList[$name], $this->input, $output_array);
         return isset($output_array[1]) ? $output_array[1] : null;
     }
