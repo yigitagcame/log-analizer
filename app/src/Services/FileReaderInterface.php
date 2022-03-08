@@ -16,5 +16,5 @@ interface FileReaderInterface
      *
      * @return array
      */
-    public function readByLine(): array;
+    public function readByLineIterator($iterator): array;
 }

@@ -14,8 +14,6 @@ class HttpLogCounterService
 
     private object $regexExtracter;
 
-    private array $fileContent;
-
     private array $searchFields;
   
     public function __construct(array $searchFields, string $filePath)
@@ -26,17 +24,15 @@ class HttpLogCounterService
           'date' => '/\[(\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2}\s\+\d{1,4})\]/',
           'statusCode' => '/\s(\d{3})/',
         ]);
-
-        $this->fileContent = $this->fileReader->readByLine();
         $this->searchFields = $searchFields;
     }
 
     public function count()
     {
-        $search = array_map(function ($logLine) {
+        $search = $this->fileReader->readByLineIterator(function ($logLine) {
             $this->regexExtracter->setInput($logLine);
             return (int) $this->matchMaker();
-        }, $this->fileContent);
+        });
 
         return array_sum($search);
     }

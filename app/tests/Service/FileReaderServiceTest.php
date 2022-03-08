@@ -18,6 +18,8 @@ class FileReaderServiceTest extends KernelTestCase
         $file = new FileReaderService($fileName);
 
         $this->assertIsString($file->read());
-        $this->assertIsArray($file->readByLine());
+        $this->assertIsArray($file->readByLineIterator(function ($line) {
+            return $line;
+        }));
     }
 }

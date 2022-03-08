@@ -37,14 +37,18 @@ class FileReaderService implements FileReaderInterface
     }
     
     /**
-     * Get the file content line by line
+     * Iterate the file content line by line
      *
      * @return array
      */
-    public function readByLine() : array
+    public function readByLineIterator($iterator) : array
     {
+        if (!is_callable($iterator)) {
+            return null;
+        }
+
         while (!feof($this->file)) {
-            $lines[] = fgets($this->file);
+            $lines[] = $iterator(fgets($this->file), null);
         }
 
         return $lines;
